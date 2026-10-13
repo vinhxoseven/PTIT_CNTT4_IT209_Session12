@@ -1,0 +1,62 @@
+name: CD Multi-Environment Pipeline
+
+on:
+  push:
+    branches:
+      - develop
+      - main
+
+jobs:
+  deploy-staging:
+    name: Deploy to Staging
+    runs-on: ubuntu-latest
+    if: github.ref == 'refs/heads/develop'
+    environment:
+      name: staging
+      url: https://api.staging.example.com
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+
+      - name: Set up Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: '18'
+
+      - name: Install dependencies & build
+        run: |
+          npm install
+          npm run build
+
+      - name: Deploy to Staging Server
+        run: |
+          echo "Deploying application to Staging environment..."
+          # Thêm các lệnh deploy thực tế tại đây (ví dụ: SSH, SCP, AWS CLI, v.v.)
+          echo "Deployment to Staging completed successfully!"
+
+  deploy-prod:
+    name: Deploy to Production
+    runs-on: ubuntu-latest
+    if: github.ref == 'refs/heads/main'
+    environment:
+      name: production
+      url: https://api.prod.example.com
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+
+      - name: Set up Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: '18'
+
+      - name: Install dependencies & build
+        run: |
+          npm install
+          npm run build
+
+      - name: Deploy to Production Server
+        run: |
+          echo "Deploying application to Production environment..."
+          # Thêm các lệnh deploy thực tế tại đây
+          echo "Deployment to Production completed successfully!"
